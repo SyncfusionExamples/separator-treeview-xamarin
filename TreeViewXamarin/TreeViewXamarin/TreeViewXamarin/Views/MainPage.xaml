@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TreeViewXamarin"
+             xmlns:treeview="clr-namespace:Syncfusion.XForms.TreeView;assembly=Syncfusion.SfTreeView.XForms"
+             x:Class="TreeViewXamarin.MainPage">
+    <ContentPage.BindingContext>
+        <local:FileManagerViewModel x:Name="viewModel"/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:ExpanderIconVisibilityConverter x:Key="ExpanderIconVisibilityConverter"/>
+            <local:ExpanderIconConverter x:Key="ExpanderIconConverter" />
+            <local:IndentationConverter x:Key="IndentationConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <treeview:SfTreeView x:Name="treeView"
+                            ItemHeight="40"
+                            Indentation="0"
+                            ExpanderWidth="0"
+                            AutoExpandMode="None"
+                            ItemTemplateContextType="Node"
+                            ChildPropertyName="SubFiles"
+                            ExpandActionTarget="Node"
+                            ItemsSource="{Binding ImageNodeInfo}">
+            <treeview:SfTreeView.ItemTemplate>
+                <DataTemplate>
+                    <Grid x:Name="grid" Padding="5,5,5,5" RowSpacing="0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding Level, Converter={StaticResource IndentationConverter}}" />
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Column="1" Source="{Binding IsExpanded,Converter={StaticResource ExpanderIconConverter}}"
+                                       IsVisible="{Binding HasChildNodes,Converter={StaticResource ExpanderIconVisibilityConverter}}"
+                                           VerticalOptions="Center" 
+                                           HorizontalOptions="Center"
+                                           HeightRequest="15" 
+                                           WidthRequest="15"/>
+                            <Image Grid.Column="2" Source="{Binding Content.ImageIcon}" VerticalOptions="Center" HorizontalOptions="Start" HeightRequest="35" WidthRequest="35"/>
+                            <Grid Grid.Column="3" RowSpacing="1" Padding="1,0,0,0" VerticalOptions="Center">
+                                <Label LineBreakMode="NoWrap" Text="{Binding Content.ItemName}" VerticalTextAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="Gray" Grid.Row="1"/>
+                    </Grid>
+                </DataTemplate>
+            </treeview:SfTreeView.ItemTemplate>
+        </treeview:SfTreeView>
+    </ContentPage.Content>
+</ContentPage>
